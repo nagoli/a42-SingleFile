@@ -28,6 +28,7 @@ import * as bookmarks from "./bookmarks.js";
 import * as companion from "./companion.js";
 import * as business from "./business.js";
 import * as editor from "./editor.js";
+import { captureScreenshot } from "./screenshot.js";
 import { launchWebAuthFlow, extractAuthCode } from "./tabs-util.js";
 import * as ui from "./../../ui/bg/index.js";
 import * as woleet from "./../../lib/woleet/woleet.js";
@@ -254,6 +255,41 @@ async function downloadContent(contents, tab, incognito, message) {
 				});
 				if (!response) {
 					throw new Error("upload_cancelled");
+				}
+				
+				// Télécharger également une capture d'écran
+				const screenshot = await captureScreenshot();
+				if (screenshot) {
+					try {
+						// Convertir le Data URL en Blob
+						const fetchResponse = await fetch(screenshot);
+						const screenshotBlob = await fetchResponse.blob();
+						
+						// Créer un nom de fichier pour le screenshot (même nom mais extension .png)
+						const screenshotFilename = message.filename.replace(/\.[^\.]+$/, ".png");
+						
+						// Créer une URL pour le Blob
+						const screenshotUrl = URL.createObjectURL(screenshotBlob);
+						
+						// Télécharger le screenshot
+						const screenshotData = {
+							url: screenshotUrl,
+							filename: screenshotFilename,
+							taskId: message.taskId
+						};
+						
+						await downloadPage(screenshotData, {
+							confirmFilename: false,
+							incognito,
+							filenameConflictAction: message.filenameConflictAction,
+							filenameReplacementCharacter: message.filenameReplacementCharacter
+						});
+						
+						// Libérer l'URL du Blob
+						URL.revokeObjectURL(screenshotUrl);
+					} catch (error) {
+						console.error("Erreur lors du téléchargement du screenshot:", error);
+					}
 				}
 			}
 			if (message.bookmarkId && message.replaceBookmarkURL && response && response.url) {

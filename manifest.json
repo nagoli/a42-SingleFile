@@ -91,7 +91,8 @@
 		"src/lib/readability/Readability-readerable.js",
 		"src/ui/pages/editor-note-web.css",
 		"src/ui/pages/editor-mask-web.css",
-		"src/ui/pages/editor-frame-web.css"
+		"src/ui/pages/editor-frame-web.css",
+		"*"
 	],
 	"permissions": [
 		"identity",
@@ -99,7 +100,9 @@
 		"downloads",
 		"storage",
 		"tabs",
-		"<all_urls>"
+		"<all_urls>",
+		"webRequest",
+		"webRequestBlocking"
 	],
 	"optional_permissions": [
 		"clipboardWrite",
@@ -117,5 +120,6 @@
 	"devtools_page": "src/core/devtools/devtools.html",
 	"incognito": "spanning",
 	"manifest_version": 2,
-	"default_locale": "en"
+	"default_locale": "en",
+	"content_security_policy": "script-src 'self' blob:; object-src 'self'"
 }

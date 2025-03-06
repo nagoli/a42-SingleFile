@@ -1,0 +1,9 @@
+companion.js : 
+- ajout de la capture d ecran 
+
+autosave.js : 
+- envoi de la capture d ecran au companion 
+
+manifest.js :
+- ajout d autorisation suplémentaire pour l execution 
+

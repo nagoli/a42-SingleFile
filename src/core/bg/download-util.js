@@ -38,6 +38,8 @@ export {
 };
 
 async function download(downloadInfo, replacementCharacter) {
+
+	console.log("download-util called");
 	let downloadId;
 	const result = new Promise((resolve, reject) => {
 		browser.downloads.onChanged.addListener(onChanged);

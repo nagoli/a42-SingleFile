@@ -198,10 +198,12 @@ async function saveContent(message, tab) {
 							filenameConflictAction: options.filenameConflictAction
 						})).pushPromise;
 					} else if (options.saveWithCompanion && !options.compressContent) {
+						// OLI : hook companion save to add screenshots
 						await companion.save({
 							filename: pageData.filename,
 							content: pageData.content,
-							filenameConflictAction: options.filenameConflictAction
+							filenameConflictAction: options.filenameConflictAction,
+							screenshot: pageData.screenshot
 						});
 					} else if (options.saveToRestFormApi) {
 						await downloads.saveToRestFormApi(

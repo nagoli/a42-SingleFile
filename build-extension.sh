@@ -1,17 +1,30 @@
 #!/bin/bash
 
-dpkg -s zip &> /dev/null
-if [ $? -ne 0 ]
-then
-    echo "Installing zip"
-    sudo apt install zip
-fi
+# Détecter le système d'exploitation
+if [[ "$(uname)" == "Darwin" ]]; then
+    # macOS
+    if ! command -v zip &> /dev/null; then
+        echo "Installing zip"
+        brew install zip
+    fi
 
-dpkg -s jq &> /dev/null
-if [ $? -ne 0 ]
-then
-    echo "Installing jq"
-    sudo apt install jq
+    if ! command -v jq &> /dev/null; then
+        echo "Installing jq"
+        brew install jq
+    fi
+else
+    # Linux (Debian/Ubuntu)
+    dpkg -s zip &> /dev/null
+    if [ $? -ne 0 ]; then
+        echo "Installing zip"
+        sudo apt install zip
+    fi
+
+    dpkg -s jq &> /dev/null
+    if [ $? -ne 0 ]; then
+        echo "Installing jq"
+        sudo apt install jq
+    fi
 fi
 
 npm install

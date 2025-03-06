@@ -23,6 +23,8 @@
 
 /* global browser */
 
+import { captureScreenshot } from "./screenshot.js";
+
 let enabled = true;
 
 export {
@@ -56,9 +58,18 @@ async function externalSave(pageData) {
 	}
 }
 
+
+
 async function save(pageData) {
 	let response;
 	try {
+		// Capturer l'écran avant d'envoyer les données
+		const screenshot = await captureScreenshot();
+		if (screenshot) {
+			// Ajouter le screenshot aux données de la page
+			pageData.screenshot = screenshot;
+		}
+
 		response = await browser.runtime.sendNativeMessage("singlefile_companion", {
 			method: "save",
 			pageData
